@@ -672,13 +672,13 @@
                                     {{ action.startTime }}
                                 </span>
                             {% endif %}
-
+                            {% if action.concept is not None %}
                             <a href="{{ action.conceptURI }}" target="_blank">
                                 <span class="badge badge-error">
                                     {{ action.concept }}
                                 </span>
                             </a>
-
+                            {% endif %}
                         </div>
                     {% endfor %}
                 </div>
