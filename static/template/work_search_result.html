@@ -1,0 +1,39 @@
+{% extends "master.html" %}
+{% load staticfiles %}
+{% block contenido %}
+<div class="navbar-wrapper">
+  <div class="container">
+    <nav class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">Personajes Ilustres de Loja</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav mr-auto">
+            <li class="active"><a href="/">Inicio</a></li>
+            <li><a href="/people">Personajes</a></li>
+            <li><a href="/works">Obras</a></li>
+          </ul>
+          <form class="navbar-form navbar-right" action="/work_search_result">
+              <input class="form-control mr-sm-2" type="text" placeholder="Nombre de la Obra" name="search" required="true">
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
+<br>
+<div class="container" id="uno">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h1 class="panel-title">Resultado de Búsqueda de Obras de Personajes Ilustres de Loja</h1>
+		</div>
+		<div class="panel-body"> 
+			{% for work in works %}
+		    	<p><a href="/work/?uri={{work.uri}}">{{ work.name }}</a></p>
+		    {% endfor %}
+		</div>
+	</div>
+</div>
+{% endblock %}

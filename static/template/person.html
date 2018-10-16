@@ -1,0 +1,835 @@
+{% extends "master.html" %}
+{% load staticfiles %}
+{% block contenido %}
+<div class="navbar-wrapper">
+  <div class="container">
+    <nav class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">Personajes Ilustres de Loja</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav mr-auto">
+            <li class="active"><a href="/">Inicio</a></li>
+            <li><a href="/people">Personajes</a></li>
+            <li><a href="/works">Obras</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<div class="container" id="dos">
+    <div class="row">
+        <a href="{{person.uri}}" target="_blank">
+            <h1>{% if person.title is not None%} {{ person.title }} {% endif %} {{ person.firstName }} {{ person.lastName }}</h1>
+        </a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="well well-lg">
+            <!-- Carousel -->
+                <div class="row" align="center">
+                  <div id="myCarousel" class="carousel slide pers" data-ride="carousel">
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner">
+                        <!-- Indicators -->
+                        <ol class="carousel-indicators">
+                            {% for image in images %}
+                                {% if images|length > 1 %}
+                                {% if forloop.counter0 == 0 %}
+                                <li data-target="#myCarousel" data-slide-to="{{ forloop.counter0 }}" class="active"></li>
+                                {% else %}
+                                <li data-target="#myCarousel" data-slide-to="{{ forloop.counter0 }}"></li>
+                                {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </ol>
+                    {% if images %}
+                        {% for image in images %}
+                            {% if forloop.counter == 1 %}
+                            <div class="item active">
+                            {% else %}
+                            <div class="item">
+                            {% endif %}
+                                <img src="{{ image.image }}" " class="img-thumbnail" alt="Person Picture" title="{{ person.imageTitle }}" style="height:100%;">
+
+                                <a href="" class="img-inf" data-toggle="modal" data-target="#myModal{{ forloop.counter }}">
+                                    <span class="badge badge-info">
+                                        <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Img Inf.
+                                    </span>
+                                </a>
+                            </div>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="myModal{{ forloop.counter }}" role="dialog">
+                                <div class="modal-dialog modal-xm">
+                                    <div class="modal-content">
+                                        <div class="modal-header-primary">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Datos de Imágen</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <dl class="dl-horizontal dl-img">
+                                                <dt>Título: </dt>
+                                                <dd>{{ image.imageTitle }}</dd>
+                                                <dt>Descripción: </dt>
+                                                <dd>{{ image.imageDescription }}</dd>
+                                                {% if image.imageCreator is not None %}
+                                                    <dt>Creador: </dt>
+                                                    <dd><a href="{{ image.imageCreatorURI }}" target="_blank">{{ image.imageCreator }}</a></dd>
+                                                {% endif %}
+                                                {% if image.imageDateCreated is not None %}
+                                                    <dt>Fecha: </dt>
+                                                    <dd>{{ image.imageDateCreated }}</dd>
+                                                {% endif %}
+                                                {% if image.imagePublisher is not None %}
+                                                    <dt>Expuesta Por: </dt>
+                                                    <dd><a href="{{ image.imagePublisherURI }}" target="_blank">{{ image.imagePublisher }}</a></dd>
+                                                {% endif %}
+                                                <dt>Contribuidor: </dt>
+                                                <dd><a href="{{ image.imageContributorURI }}" target="_blank">{{ image.imageContributor }}</a></dd>
+                                            </dl>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% if forloop.counter > 1 %}
+                            <!-- Left and right controls -->
+                            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                              <span class="glyphicon glyphicon-chevron-left"></span>
+                              <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                              <span class="glyphicon glyphicon-chevron-right"></span>
+                              <span class="sr-only">Next</span>
+                            </a>
+                            {% endif %}
+
+                        {% endfor %}
+                    {% else %}
+                        <div class="item active">
+                            <img src="{%  static 'img/profile_picture.png' %}" class="img-thumbnail" alt="Person Picture" title="Person Picture" style="height:100%;">
+                        </div>
+                {% endif %}
+                    </div>
+
+                  </div>
+                </div>
+                <!-- end carousel -->
+
+                {% if occupations %}
+                <hr>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <p>Ocupación:</p>
+                    </div>
+                    <div class="panel-body"> 
+                    <u style="text-decoration: none;">
+                        {% for occupation in occupations %}
+                            {% if occupation.sameAs %}
+                            <a href="{{ occupation.sameAs }}" target="_blank">
+                            {% else %}
+                            <a href="{{ occupation.URI }}" target="_blank">
+                            {% endif %}
+                                <li>{{ occupation.name }}</li>
+                            </a>
+                        {% endfor %}
+                    </u>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <a data-toggle="tooltip" data-placement="right" title="<span class='tooltip-badge-info'>Lugar</span> <span class='tooltip-badge-warning'>Fecha</span>" class="white-tooltip" data-html="true">Datos Personales</a>
+                    </h3>
+                </div>
+                <div class="panel-body" id="alingiz">
+                    <dl class="dl-horizontal">
+                        {% if person.title is not None%}
+                            <dt>Título:</dt>
+                            <dd>{{ person.title }}</dd>
+                        {% endif %}
+                        <dt>Nombres:</dt>
+                        <dd>{{ person.firstName }}</dd>
+                        <dt>Apellidos: </dt>
+                        <dd>{{ person.lastName }}</dd> 
+                        {% if person.birthName is not None%}
+                            <dt>Nombre de Nacimiento:</dt>
+                            <dd>{{ person.birthName }}</dd>
+                        {% endif %}
+                        <dt>Género:</dt>
+                        <dd>
+                            <a href="{{ person.genderURI }}" target="_blank">{{ person.gender }}</a>
+                        </dd>    
+                        {% if externalURIs %}
+                            <dt>Recursos relacionados:</dt>
+                        {% endif %}
+                        {% for externalURI in externalURIs %}
+                            <dd>
+                                <a href="{{ externalURI.uri }}" target="_blank">{{ externalURI.uri }}</a>
+                            </dd>
+                        {% endfor %}
+                        <dt>Fecha de Nacimiento:</dt>
+                        <dd>
+                            <span class="badge badge-warning">
+                                {{ person.birthDate }}
+                            </span>
+                        </dd> 
+                        {% if person.birthPlace %} 
+                            <dt>Lugar de Nacimiento:</dt>
+                            <dd>
+                                {% if person.birthPlaceSameAs %}
+                                <a href="{{ person.birthPlaceSameAs }}" target="_blank">
+                                {% else %}
+                                <a href="#">
+                                {% endif %}
+                                    <span class="badge badge-info">
+                                        {{ person.birthPlace }}
+                                    </span>
+                                </a>
+                            </dd>
+                        {% endif %}
+                        {% if person.deathDate is not None %}
+                            <dt>Fecha de Fallecimiento:</dt>
+                            <dd>
+                                <span class="badge badge-warning">
+                                    <span>{{ person.deathDate }}</span>
+                                </span>
+                            </dd>
+                        {% endif %}
+                        {% if person.deathPlace %}
+                            <dt>Lugar de Fallecimiento:</dt>
+                            <dd>
+                                {% if person.deathPlaceSameAs %}
+                                <a href="{{ person.deathPlaceSameAs }}" target="_blank">
+                                {% else %}
+                                <a href="#">
+                                {% endif %}
+                                    <span class="badge badge-info">
+                                        {{ person.deathPlace }}
+                                    </span>
+                                </a>
+                            </dd>
+                        {% endif %}
+                        {% for nationality in nationalities %}
+                            <dt>País de nacionalidad:</dt>
+                            <dd>
+                                {% if nationality.sameAs %}
+                                <a href="{{ nationality.sameAs }}" target="_blank">
+                                {% else %}
+                                <a href="#">
+                                {% endif %}
+                                    <span class="badge badge-info">
+                                        {{ nationality.name }}
+                                    </span>
+                                </a>
+                            </dd>                
+                        {% endfor %}
+                    </dl>
+                    <dl class="dl-horizontal">
+                        {% if knownFors %}
+                            <dt>Conocido(a) por:</dt>
+                            {% for knownFor in knownFors %}
+                                <dd>{{ knownFor.name }}</dd>
+                            {% endfor %}
+                        {% endif %}
+                    </dl>
+
+                    <dl class="dl-horizontal">
+                        <dt>En las categorías:</dt>
+                        {% for concept in concepts %}
+                            {% if concept.conceptMatch is not None %}
+                                <dd>
+                                    <li>
+                                    <a href="{{ concept.conceptMatch }}" target="_blank">{{ concept.name }}</a>
+                                    </li>
+                                </dd>
+
+                            {% else %}
+                                <dd>
+                                    <li>
+                                    <a href="{{ concept.conceptURI }}" target="_blank">{{ concept.name }}</a>
+                                    </li>
+                                </dd>
+                            {% endif %}
+                        {% endfor %}
+                    </dl>            	
+                </div>
+                {% if residences %}
+                    <div class="panel-footer dl-horizontal">
+                        <dt>Ha vivido en:</dt>
+                        <dd>
+                        {% for residence in residences %}
+                            {% if residence.sameAs %}
+                            <a href="{{ residence.sameAs }}" target="_blank">
+                            {% else %}
+                            <a href="#">
+                            {% endif %}
+                                <span class="badge badge-info">
+                                    {{ residence.name }}
+                                </span>
+                            </a>
+                        {% endfor %}
+                        </dd>
+                    </div>
+                {% endif %}
+            </div>
+            <!-- Family -->
+            {% if parents or siblings or spouses or child %}
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <a data-toggle="tooltip" data-placement="right" title="<span class='tooltip-badge-error'>Personaje Ilustre</span>" class="white-tooltip" data-html="true">Familia</a>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <dl class="dl-horizontal">
+                    <!-- Parents -->
+                    {% if parents %}
+                        <dt>Padres:</dt>
+                        {% for parent in parents %}
+                            {% if parent.uri is not None %}
+                                <dd>
+                                    <a href="/person/?uri={{ parent.uri }}">
+                                        <span class="badge badge-error">
+                                            {{ parent.name }}
+                                        </span>
+                                    </a>
+                                </dd>
+                            {% else %}
+                                <dd>
+                                    <a href="{{ parent.uriLocal }}" target="_blank">{{ parent.name }}</a>
+                                </dd>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    <!-- Siblings -->
+                    {% if siblings %}
+                        <dt>Hermano(s):</dt>
+                        {% for sibling in siblings %}
+                            {% if sibling.uri is not None %}
+                                <dd>
+                                    <a href="/person/?uri={{ sibling.uri }}">
+                                        <span class="badge badge-error">
+                                            {{ sibling.name }}
+                                        </span>
+                                    </a>
+                                </dd>
+                            {% else %}
+                                <dd>
+                                    <a href="{{ sibling.uriLocal }}" target="_blank">{{ sibling.name }}</a>
+                                </dd>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    <!-- Spouses -->
+                    {% if spouses %}
+                        <dt>Cónyuge(s): </dt>
+                        {% for spouse in spouses %}
+                            {% if spouse.uri is not None %}
+                                <dd>
+                                    <a href="/person/?uri={{ spouse.uri }}">
+                                        <span class="badge badge-error">
+                                            {{ spouse.name }}
+                                        </span>
+                                    </a>
+                                </dd>
+                            {% else %}
+                                <dd>
+                                    <a href="{{ spouse.uriLocal }}" target="_blank">{{ spouse.name }}</a>
+                                </dd>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    <!-- Children -->
+                    {% if children %}
+                        <dt>Hijo(s): </dt>
+                        {% for child in children %}
+                            {% if child.uri is not None %}
+                                <dd>
+                                    <a href="/person/?uri={{ child.uri }}">
+                                        <span class="badge badge-error">
+                                            {{ child.name }}
+                                        </span>
+                                    </a>
+                                </dd>
+                            {% else %}
+                                <dd>
+                                    <a href="{{ child.uriLocal }}" target="_blank">{{ child.name }}</a>
+                                </dd>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    </dl>
+                </div>
+            </div>
+            {% endif %}
+            {% if academicEducations %}
+            <div class="panel panel-primary"> 
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <a data-toggle="tooltip" data-placement="right" title="<span class='tooltip-badge-success'>Institución Educativa</span> <a>&middot; Campo de Estudio &middot;</a> <span class='tooltip-badge-info'>Lugar</span> <span class='tooltip-badge-warning'>Fecha Inicial</span> <span class='tooltip-badge'>Fecha Final</span>" class="white-tooltip" data-html="true">Educación Académica</a>
+                    </h3>
+                </div>
+                <div class="list-group">
+                    {% for academicEducation in academicEducations %}
+                        <div class="list-group-item">
+                            <!-- Academic Institution -->
+                            {% if academicEducation.institutionSameAs is not None %}
+                                <a href="{{ academicEducation.institutionSameAs }}" target="_blank">
+                                    <span class="badge badge-success">
+                                        {{ academicEducation.institution }}
+                                    </span>
+                                </a>
+                            {% else %}
+                                <a href="{{ academicEducation.institutionURI }}" target="_blank">
+                                    <span class="badge badge-success">
+                                        {{ academicEducation.institution }}
+                                    </span>
+                                </a>
+<!--                                 <span class="badge badge-success badge-none">
+                                    {{ academicEducation.institution }}
+                                </span> -->
+                            {% endif %}
+                            <!-- Study Field -->
+                            {% if academicEducation.studyField is not None %}
+                                &middot; {{ academicEducation.studyField }} &middot;
+                            {% endif %}
+                            <!-- Academic Education Place -->
+                            {% if academicEducation.place is not None %}
+                                {% if academicEducation.placeSameAs is not None %}
+                                    <a href="{{ academicEducation.placeSameAs }}" target="_blank">
+                                        <span class="badge badge-info">
+                                            {{ academicEducation.place }}
+                                        </span>
+                                    </a>
+                                {% else %}
+                                    <span class="badge badge-info badge-none">
+                                        {{ academicEducation.place }}
+                                    </span>
+                                {% endif %}
+                            {% endif %}
+                            <!-- Academic Education EndDate -->
+                            {% if academicEducation.endDate is not None %}
+                                <span class="badge">
+                                    {{ academicEducation.endDate }}
+                                </span>
+                            {% endif %}
+                            <!-- Academic Education StartDate -->
+                            {% if academicEducation.startDate is not None %}
+                                <span class="badge badge-warning">
+                                    {{ academicEducation.startDate }}
+                                </span>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            <!-- Professions -->
+            {% if professions %}
+            <div class="panel panel-primary"> 
+                <div class="panel-heading">   
+                    <h3 class="panel-title">
+                        <a data-toggle="tooltip" data-placement="right" title="<a>&middot; Título Profesional &middot;</a> <span class='tooltip-badge-success'>Institución Educativa</span> <span class='tooltip-badge-info'>Lugar</span> <span class='tooltip-badge-warning'>Fecha</span>" class="white-tooltip" data-html="true">Profesiones</a>
+                    </h3>
+                </div>
+                <div class="list-group">
+                    {% for profession in professions %}
+                        <div class="list-group-item">
+                            <!-- Profession name -->
+                            {% if profession.professionSameAs is not None %}
+                                <a href="{{ profession.professionSameAs }}" target="_blank">
+                                    <span class="badge badge-info">
+                                        {{ profession.name }}
+                                    </span>
+                                </a>
+                            {% else %}
+                                <a href="{{ profession.professionURI }}" target="_blank">
+                                    <span class="badge badge-info">
+                                        {{ profession.name }}
+                                    </span>
+                                </a>
+                            {% endif %}
+                            <!-- Profession conferredBy -->
+                            {% if profession.conferredBy is not None %}
+                                {% if profession.conferredBySameAs is not None %}
+                                <a href="{{ profession.conferredBySameAs }}" target="_blank">
+                                {% else %}
+                                <a href="{{ profession.conferredByURI }}" target="_blank">
+                                {% endif %}
+                                    <span class="badge badge-success badge-none">
+                                        {{ profession.conferredBy }}
+                                    </span>
+                                </a>
+                            {% endif %}
+                            {% if profession.conferredIn is not None %}
+                                {% if profession.conferredInSameAs is not None %}
+                                <a href="{{ profession.conferredInSameAs }}" target="_blank">
+                                {% else %}
+                                <a href="">
+                                {% endif %}
+                                    <span class="badge badge-info">
+                                        {{ profession.conferredIn }}
+                                    </span>
+                                </a>
+                            {% endif %}
+                            {% if profession.date is not None %}
+                                <span class="badge badge-warning">
+                                    {{ profession.date }}
+                                </span>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            <!-- Jobs -->
+            {% if jobs %}
+            <div class="panel panel-primary"> 
+                <div class="panel-heading">    
+                    <h3 class="panel-title">
+                        <a data-toggle="tooltip" data-placement="right" title="<a>&middot; Cargo &middot; Área &middot;</a> <span class='tooltip-badge-success'>Institución</span> <a>&middot; Asignatura(s) Impartida(s) &middot;</a> <span class='tooltip-badge-info'>Lugar</span> <span class='tooltip-badge-warning'>Fecha Inicial</span> <span class='tooltip-badge'>Fecha Final</span>" class="white-tooltip" data-html="true">Cargos</a>
+                    </h3>
+                </div>
+                <div class="list-group">
+                    {% for job in jobs %}
+                        <div class="list-group-item">
+                            {% if job.positionSameAs is not None %}
+                            <a href="{{ job.positionSameAs }}" target="_blank">
+                                <span class="badge badge-info">
+                                    {{ job.position }}
+                                </span>
+                            </a>
+                            {% else %}
+                            <a href="{{ job.positionURI }}" target="_blank">
+                                <span class="badge badge-info">
+                                    {{ job.position }}
+                                </span>
+                            </a>
+                            {% endif %}
+                            {% if job.area is not None %}
+                                &middot; {{ job.area }} &middot;
+                            {% endif %}
+                            {% if job.institution is not None %}
+                                {% if job.institutionSameAs is not None %}
+                                <a href="{{ job.institutionSameAs }}" target="_blank">
+                                    <span class="badge badge-success">
+                                        {{ job.institution }}
+                                    </span>
+                                </a>
+                                {% else %}
+                                <a href="{{ job.institutionURI }}" target="_blank">
+                                    <span class="badge badge-success">
+                                        {{ job.institution }}
+                                    </span>
+                                </a>
+                                {% endif %}
+                            {% endif %}
+                            {% if job.subjectTeached is not None %}
+                                &middot; {{ job.subjectTeached }} &middot;
+                            {% endif %}
+                            {% if job.place is not None %}
+                                {% if job.placeSameAs is not None %}
+                                <a href="{{ job.placeSameAs }}" target="_blank">
+                                    <span class="badge badge-info">
+                                        {{ job.place }}
+                                    </span>
+                                </a>
+                                {% else %}
+                                    <span class="badge badge-info badge-none">
+                                        {{ job.place }}
+                                    </span>
+                                {% endif %}
+                            {% endif %}
+                            {% if job.endDate is not None %}
+                                <span class="badge">
+                                    {{ job.endDate }}
+                                </span>
+                            {% endif %}
+                            {% if job.startDate is not None %}
+                                <span class="badge badge-warning">
+                                    {{ job.startDate }}
+                                </span>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            <!-- Works -->
+            {% if works %}
+            <div class="panel panel-primary">  
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <a data-toggle="tooltip" data-placement="right" title="<a>&middot; Obra &middot;</a> <span class='tooltip-badge-inverse'>Género</span> <span class='tooltip-badge-error'>Editor (Publisher)</span> <span class='tooltip-badge-info'>Lugar</span> <span class='tooltip-badge-warning'>Fecha</span>" class="white-tooltip" data-html="true">Obras</a>
+                    </h3>
+                </div>
+                <div class="list-group">
+                    {% for work in works %}
+                        <div class="list-group-item">
+                            <!-- Work name -->
+                            <a href="/work/?uri={{ work.work }}">
+                                <span class="badge badge-info">
+                                    {{ work.name }}
+                                </span>
+                            </a>
+                            <!-- Work genre -->
+                            {% if work.genre is not None %}
+                                {% if work.genreSameAs is not None %}
+                                <a href="{{ work.genreSameAs }}" target="_blank">
+                                    <span class="badge badge-inverse">
+                                        {{ work.genre }}
+                                    </span>
+                                </a>
+                                {% else %}
+                                <a href="{{ work.genreURI }}" target="_blank">
+                                    <span class="badge badge-inverse">
+                                        {{ work.genre }}
+                                    </span>
+                                </a>
+                                {% endif %}
+                            {% endif %}
+                            <!-- Work publisher -->
+                            {% if work.publisher is not None %}
+                                {% if work.publisherSameAs is not None %}
+                                <a href="{{ work.publisherSameAs }}" target="_blank">
+                                    <span class="badge badge-error badge-none">
+                                        {{ work.publisher }}
+                                    </span>
+                                </a>
+                                {% else %}
+                                    <span class="badge badge-error badge-none">
+                                        {{ work.publisher }}
+                                    </span>
+                                {% endif %}
+                            {% endif %}
+                            <!-- Work place -->
+                            {% if work.locationCreated is not None %}
+                                {% if work.locationCreatedSameAs is not None%}
+                                <a href="{{ work.locationCreatedSameAs }}" target="_blank">
+                                    <span class="badge badge-info">
+                                        {{ work.locationCreated }}
+                                    </span>
+                                </a>
+                                {% else %}
+                                    <span class="badge badge-info badge-none">
+                                        {{ work.locationCreated }}
+                                    </span>
+                                {% endif %}
+                            {% endif %}
+                            <!-- Work date -->
+                            {% if work.dateCreated is not None %}
+                                <span class="badge badge-warning">
+                                    {{ work.dateCreated }}
+                                </span> 
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            <!-- Actions -->
+            {% if actions %} 
+            <div class="panel panel-primary"> 
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <a data-toggle="tooltip" data-placement="right" title="<a>&middot; Acción &middot; <span class='tooltip-badge-info'>Lugar</span> <span class='tooltip-badge-warning'>Fecha</span>" class="white-tooltip" data-html="true">Acciones Realizadas</a>
+                    </h3>
+                </div>
+                <div class="list-group">
+                    {% for action in actions %}
+                        <div class="list-group-item">
+                            <a href="{{ action.URI }}" target="_blank">{{ action.name }}</a> 
+                            {% if action.location is not None %}
+                                {% if action.locationSameAs is not None %}
+                                <a href="{{ action.locationSameAs }}" target="_blank">
+                                    <span class="badge badge-info">
+                                        {{ action.location }}
+                                    </span>
+                                </a>
+                                {% else %}
+                                    <span class="badge badge-info badge-none">
+                                        {{ action.location }}
+                                    </span>
+                                {% endif %}
+                            {% endif %}
+                            {% if action.startTime is not None %}
+                                <span class="badge badge-warning">
+                                    {{ action.startTime }}
+                                </span>
+                            {% endif %}
+
+                            <a href="{{ action.conceptURI }}" target="_blank">
+                                <span class="badge badge-error">
+                                    {{ action.concept }}
+                                </span>
+                            </a>
+
+                        </div>
+                    {% endfor %}
+                </div>
+            </div> 
+            {%  endif %}
+            <!-- Awards -->
+            {% if awards %} 
+            <div class="panel panel-primary"> 
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <a data-toggle="tooltip" data-placement="right" title="<a>&middot; Premio &middot; Causa &middot;</a> <span class='tooltip-badge-magneta'>Evento</span> <span class='tooltip-badge-success'>Conferido por (Institución)</span> <a> </a> <span class='tooltip-badge-info'>Lugar</span> <span class='tooltip-badge-warning'>Fecha</span>" class="white-tooltip" data-html="true">Premios y reconocimientos</a>
+                    </h3>
+                </div>
+                <div class="list-group">
+                    {% for award in awards %}
+                        <div class="list-group-item">
+                            <!-- Award name -->
+                            {% if award.sameAs is not None %}
+                            <a href="{{ award.sameAs }}" target="_blank">
+                                <span class="badge badge-success">
+                                    {{ award.name }}
+                                </span>
+                            </a>
+                            {% else %}
+                            <a href="{{ award.URI }}" target="_blank">
+                                <span class="badge badge-success">
+                                    {{ award.name }}
+                                </span>
+                            </a>
+                            {% endif %}
+                            <!-- Award cause -->
+                            {% if award.cause is not None %}
+                                &middot; {{ award.cause }} &middot;
+                            {% endif %}
+                            <!-- Award event -->
+                            {% if award.event is not None %}
+                            <a href="{{ award.eventURI }}" target="_blank">
+                                <span class="badge badge-magneta">
+                                    {{ award.event }}
+                                </span>
+                            </a>
+                            {% endif %}
+                            <!-- Award conferredBy -->
+                            {% if award.conferredBy is not None %}
+                                {% if award.conferredBySameAs is not None %}
+                                <a href="{{ award.conferredBySameAs }}" target="_blank">
+                                    <span class="badge badge-success">
+                                        {{ award.conferredBy }}
+                                    </span>
+                                </a>
+                                {% else %}
+                                <a href="{{ award.conferredByURI }}" target="_blank">
+                                    <span class="badge badge-success">
+                                        {{ award.conferredBy }}
+                                    </span>
+                                </a>
+                                {% endif %}
+                            {% endif %}
+                            <!-- Award date -->
+                            {% if award.date is not None %}
+                                <span class="badge badge-warning">
+                                    {{ award.date }}
+                                </span>
+                            {% endif %}
+                            <!-- Award conferredIn -->
+                            {% if award.conferredIn is not None %}
+                                {% if award.conferredInSameAs is not None %}
+                                <a href="{{ award.conferredInSameAs }}" target="_blank">
+                                    <span class="badge badge-info">
+                                        {{ award.conferredIn }}
+                                    </span>
+                                </a>
+                                {% else %}
+                                    <span class="badge badge-info badge-none">
+                                        {{ award.conferredIn }}
+                                    </span>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            {% if bibliographicReferences %} 
+            <div class="panel panel-default"> 
+                <div class="panel-heading">
+                    <h3 class="panel-title">Referencias Bibliográficas</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <ul id="myTab" class="nav nav-pills nav-stacked">
+                                {% for reference in bibliographicReferences %}
+                                    {% if forloop.counter == 1 %}
+                                    <li class="active"><a href="#reference{{ forloop.counter }}"  data-toggle="tab">{{ reference.name }}</a></li>
+                                    {% else %}
+                                    <li class=""><a href="#reference{{ forloop.counter }}"  data-toggle="tab">{{ reference.name }}</a></li>
+                                    {% endif %}
+                                
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="tab-content col-md-8">
+                            <div class="tab-content">
+                                {% for reference in bibliographicReferences %}
+                                    {% if forloop.counter == 1 %}
+                                    <div class="tab-pane fade in active" id="reference{{ forloop.counter }}">
+                                    {% else %}
+                                    <div class="tab-pane fade" id="reference{{ forloop.counter }}">
+                                    {% endif %}
+                                        <div class="list-group-item">
+                                            <h5 class="list-group-item-heading">
+                                                {% if reference.creator is not None %}
+                                                    {{ reference.creator }} 
+                                                {% endif %}
+                                                {% if reference.date is not None%}
+                                                    ({{ reference.date }}).  
+                                                {% endif %}
+                                                <i>{{ reference.name }}</i>. 
+                                                {% if reference.publisher is not None %}
+                                                    {{ reference.publisher }}. 
+                                                {% endif %}
+                                            </h5>
+                                            <p class="list-group-item-text">
+                                                {% if reference.source is not None %}
+                                                    Disponible en: <a href="{{ reference.source }}" target="_blank">{{ reference.source }}</a>
+                                                {% endif %}
+                                                {% if reference.library is not None %}
+                                                    Disponible en: {{ reference.library }}
+                                                {% endif %}
+                                                {% if reference.libraryPlace is not None %}
+                                                    &middot; {{ reference.libraryPlace }}
+                                                {% endif %}
+                                            </p>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>  
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+});
+</script>
+{% endblock %}
+ 

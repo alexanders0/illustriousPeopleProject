@@ -1,0 +1,78 @@
+{% extends "master.html" %}
+{% load staticfiles %}
+{% block contenido %}
+<div class="navbar-wrapper">
+  <div class="container">
+    <nav class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">Personajes Ilustres de Loja</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav mr-auto">
+            <li class="active"><a href="/">Inicio</a></li>
+            <li><a href="/people">Personajes</a></li>
+            <li><a href="/works">Obras</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
+<br>
+<div class="container" id="uno">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Datos de "<a href="{{ work.work }}" target="_blank">{{ work.name }}</a>"</h3>
+		</div>
+		<div class="panel-body"> 
+			<dl class="dl-horizontal">
+				<dt>Título:</dt>
+				<dd>
+					<a href="{{ work.work }}" target="_blank">
+						{{ work.name }}
+					</a>
+				</dd>
+				{% if work.genre %}
+					<dt>Género:</dt>
+					<dd>
+					{% if work.genreSameAs is not None %}
+						<a href="{{ work.genreSameAs }}" target="_blank">{{ work.genre }}</a>
+					{% else %}
+						<a href="{{ work.genreURI }}" target="_blank">{{ work.genre }}</a>
+					{% endif %}
+					</dd>
+				{% endif %}
+				{% if work.dateCreated %}
+					<dt>Fecha de Creación:</dt>
+					<dd>{{ work.dateCreated }}</dd>
+				{% endif %}
+				{% if work.creator %}
+					<dt>Autor:</dt>
+					<dd>
+						<a href="/person/?uri={{ work.creatorURI }}">
+							{{ work.creator }}
+						</a>
+					</dd>
+				{% endif %}
+				{% if work.composer %}
+					<dt>Compositor:</dt>
+					<dd>
+						<a href="/person/?uri={{ work.composerURI }}">
+							{{ work.composer }}
+						</a>
+					</dd>
+				{% endif %}
+				{% if work.lyricist %}
+					<dt>Letrista:</dt>
+					<dd>
+						<a href="/person/?uri={{ work.lyricistURI }}">
+							{{ work.lyricist }}
+						</a>
+					</dd>
+				{% endif %}
+			</dl>
+		</div>
+	</div>
+</div>
+{% endblock %}

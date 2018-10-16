@@ -1,0 +1,246 @@
+#uno {
+	margin-top: 5em;
+}
+#dos {
+	margin-top: 5em;
+	text-align: center;
+}
+#alingiz {
+	text-align-last: left;
+}
+#tres {
+	padding-top: 2em;
+}
+#for{
+	height: 25em;
+}
+#ford{
+	height: 25em;
+	overflow: auto;
+}
+#picture{
+	height: 18em;
+}
+#personaje{
+	/*height: 140px;*/
+	max-width: 100%;
+	height: auto;
+	/*width: 140px;*/
+}
+
+.list-group-item > .badge-none {
+  float: none;
+}
+.badge-error {
+  background-color: #b94a48;
+}
+.badge-error:hover {
+  background-color: #953b39;
+}
+.badge-warning {
+  background-color: #f89406;
+}
+.badge-warning:hover {
+  background-color: #c67605;
+}
+.badge-success {
+  background-color: #468847;
+}
+.badge-success:hover {
+  background-color: #356635;
+}
+.badge-info {
+  background-color: #3a87ad;
+}
+.badge-info:hover {
+  background-color: #2d6987;
+}
+.badge-inverse {
+  background-color: #333333;
+}
+.badge-inverse:hover {
+  background-color: #1a1a1a;
+}
+.badge-magneta {
+  background-color: #e467c5;
+}
+.badge-magneta:hover {
+  background-color: #d926ac;
+}
+
+.white-tooltip + .tooltip > .tooltip-inner {
+	background-color: #fff;
+}
+
+.tooltip.right .tooltip-arrow {
+  border-right-color: #fff;
+}
+
+.tooltip-inner {
+  max-width: 900px !important;
+}
+
+.modal-header-primary {
+	border-color: #337ab7;
+	color: #fff;
+	background-color: #337ab7;
+    padding:12px 15px;
+    border-bottom:1px solid #eee;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+     border-top-left-radius: 5px;
+     border-top-right-radius: 5px;
+}
+
+.tooltip-badge {
+  display: inline-block;
+  min-width: 10px;
+  padding: 3px 7px;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  background-color: #777;
+  border-radius: 10px;
+}
+
+.tooltip-badge-info {
+  display: inline-block;
+  min-width: 10px;
+  padding: 3px 7px;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  background-color: #337ab7;
+  border-radius: 10px;
+}
+
+.tooltip-badge-success {
+  display: inline-block;
+  min-width: 10px;
+  padding: 3px 7px;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  background-color: #468847;
+  border-radius: 10px;
+}
+
+.tooltip-badge-warning {
+  display: inline-block;
+  min-width: 10px;
+  padding: 3px 7px;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  background-color: #f89406;
+  border-radius: 10px;
+}
+
+.tooltip-badge-error {
+  display: inline-block;
+  min-width: 10px;
+  padding: 3px 7px;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  background-color: #b94a48;
+  border-radius: 10px;
+}
+
+.tooltip-badge-inverse {
+  display: inline-block;
+  min-width: 10px;
+  padding: 3px 7px;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  background-color: #333333;
+  border-radius: 10px;
+}
+
+.tooltip-badge-magneta {
+  display: inline-block;
+  min-width: 10px;
+  padding: 3px 7px;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  background-color: #e467c5;
+  border-radius: 10px;
+}
+
+.carousel-inner {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.carousel-inner > .item > a > img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Opacidad inicia en 0 (no se muestra) */
+.carousel-control {
+  opacity: 0;
+}
+
+.carousel-inner:hover .carousel-control {
+  opacity: 0.7;
+}
+
+.img-inf {
+  position: absolute;
+  z-index: 18;
+  bottom: 25px;
+  right: 25px;
+}
+
+.pers {
+  height: 420px;
+}
+
+.carousel .item {
+  background-color: #f0f0f0;
+}
+
+.dl-img {
+  text-align: left;
+}
+
+/* maybe */
+.dl-horizontal > dt {
+  text-align: right !important; 
+}

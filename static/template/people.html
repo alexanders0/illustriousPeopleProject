@@ -1,0 +1,61 @@
+{% extends "master.html" %}
+{% load staticfiles %}
+{% block contenido %}
+<div class="navbar-wrapper">
+  <div class="container">
+    <nav class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">Personajes Ilustres de Loja</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav mr-auto">
+            <li class="active"><a href="/">Inicio</a></li>
+            <li><a href="/people">Personajes</a></li>
+            <li><a href="/works">Obras</a></li>
+          </ul>
+          <form class="navbar-form navbar-right" action="/search_result">
+              <input class="form-control mr-sm-2" type="text" placeholder="Nombre del Personaje" name="search" required="true">
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<div class="container" id="uno"> 
+	<div class="row" id="tres">
+			{% for person in people %}
+			<div class="col-xs-6 col-md-3">
+			  <div class="thumbnail" id="for">
+          {% if person.image is not None%}
+              <img src="{{ person.image }}" alt="Profile Picture"  id="picture" class="img-rounded">
+          {% else %}
+              <img src="{%  static 'img/profile_picture.jpg' %}" alt="Profile Picture">
+          {% endif %}
+			    <div class="caption" id="five">
+			      <h3 class="text-center"><a href="/person/?uri={{person.uri}}">{{ person.firstName }} {{ person.lastName }}</a></h3>
+			    </div>
+			  </div>
+			</div>
+	    {% endfor %}
+	</div>
+
+    <div class="col-lg-12 text-center">
+			<nav>
+			  <ul class="pagination">
+			  	{% if people.has_previous %}
+		    			<li><a href="?page={{people.previous_page_number}}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+			    {% endif %}
+			    
+			    <li class="active"><a href="">{{ people.number }} de {{ people.paginator.num_pages }}<span class="sr-only">(current)</span></a></li>
+			    
+			    {% if people.has_next %}
+		    			<li><a href="?page={{people.next_page_number}}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+			    {% endif %}
+			  </ul>
+			</nav>
+	</div>
+</div>
+{% endblock %}
